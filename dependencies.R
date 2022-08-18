@@ -1,0 +1,5 @@
+library(tidyverse)
+library(lubridate)
+library(readxl)
+library(DBI)
+print("Dependencies Loaded")
