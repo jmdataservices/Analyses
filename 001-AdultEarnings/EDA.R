@@ -25,9 +25,22 @@ dat_test <- read.csv("001-AdultEarnings/src/adult.test", skip = 1)
 dat_adults %>% head(3)
 
 dat_adults %>%
-        ggplot() +
-        geom_jitter(aes(x = EarningsClass, y = EducationNum), width = 0.5, alpha = 0.05) +
-        theme_minimal()
+        ggplot(aes(x = EarningsClass)) +
+        geom_jitter(aes(y = EducationNum), width = 0.5, alpha = 0.05) +
+        geom_boxplot(aes(y = EducationNum)) +
+        theme_moss()
 
-table(dat_adults$Sex, dat_adults$EarningsClass)
-table(dat_adults$Race, dat_adults$EarningsClass)
+dat_adults %>%
+        ggplot(aes(x = EarningsClass)) +
+        geom_violin(aes(y = EducationNum), alpha = 0.05) +
+        theme_moss()
+
+dat_adults %>%
+        select(
+                Age,
+                EducationNum,
+                CapitalGain,
+                CapitalLoss,
+                HoursWorked
+        ) %>%
+        ggpairs()

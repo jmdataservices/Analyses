@@ -1,5 +1,3 @@
-library(tidyverse)
-library(lubridate)
-library(readxl)
-library(DBI)
+library(devtools)
+library(mossR)
 print("Dependencies Loaded")
