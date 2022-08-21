@@ -24,15 +24,16 @@ dat_test <- read.csv("001-AdultEarnings/src/adult.test", skip = 1)
 
 dat_adults <- dat_adults %>%
         mutate(
-                EarningsClass = trimws(EarningsClass),
-                MaritalStatus = trimws(MaritalStatus),
-                WorkClass = trimws(WorkClass),
-                Education = trimws(Education),
-                Occupation = trimws(Occupation),
-                RelationshipStatus = trimws(RelationshipStatus),
-                Race = trimws(Race),
-                Sex = trimws(Sex),
-                NativeCountry = trimws(NativeCountry)
+                across(.cols = c(EarningsClass, MaritalStatus, WorkClass, Education, Occupation, RelationshipStatus, Race, Sex, NativeCountry), .fns = trimws),
+                HoursWorkedGroup = ifelse(
+                        HoursWorked < 15, "Minimal", ifelse(
+                                HoursWorked < 35, "PartTime", ifelse(
+                                        HoursWorked < 45, "FullTime", ifelse(
+                                                HoursWorked < 52, "OverTime", "XOverTime"
+                                        )
+                                )
+                        )
+                )
         )
 
 dat_adults %>% head(3)
@@ -60,7 +61,7 @@ dat_adults %>%
 
 dat_adults %>% head(3)
 
-for (i in c(1,2,5,6,7,8,9,10,13,14)) {
+for (i in c(1,2,5,6,7,8,9,10,14,16)) {
 
         if (i == 1) {
                 dat_adults_supertotals <- data.frame()
@@ -99,7 +100,7 @@ dat_adults_supertotals %>%
         labs(
 
         ) +
-        facet_wrap(. ~ ExplanatoryVariable, scales = "free")
+        facet_wrap(. ~ ExplanatoryVariable, scales = "free", ncol = 1)
 
 ggsave("001-AdultEarnings/testimage.png", device = "png", width = 20, height = 30, units = "in")
 
