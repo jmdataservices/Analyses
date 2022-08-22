@@ -1,0 +1,131 @@
+---
+title: "Exploring Adult Earnings"
+author: "Jamie McLaughlin"
+date: "2022-08-22"
+output:
+        html_document:
+                css: "style.css"
+---
+
+```{r setup, include = F}
+
+knitr::opts_chunk$set(
+        echo = F,
+        warning = F,
+        message = F,
+        fig.align = "center"
+)
+
+library(mossR)
+
+source('EDA.R')
+
+```
+
+## Abstract
+
+This project is a sample project designed to investigate RMarkdown to a much fuller extent than previously. Utilising different techniques in Javascript (including D3), CSS, HTML and R itself to produce outputs of general interest. The work is considered to be an exploratory data analysis (EDA) and not to provide any sort of output. It is simply an effort to understand - to a greater degree - how to build better markdown documents.
+
+<hr>
+
+## Introduction
+
+In order to better understand R Markdown, a project has been undertaken to break down and investigate a medium-sized dataset with potential for further investigation at a later date. A useful resource for this is the celebrated UCI Machine Learning Repository, hosted by the Bren School of Information and Computer Science at the University of California, Irvine. The full selection of datasets available are found at <https://archive.ics.uci.edu/ml/datasets.php> and are categorised for simplicity of selection and use case using year, number of records and features, data types and default task (with the implication being that the dataset is well-suited to those particular tasks).
+
+### Adult Earnings Classification Dataset
+
+The 'Adult' dataset, found at <https://archive.ics.uci.edu/ml/datasets/Adult>, is a multivariate dataset donated in 1996 and derived from US census data. It features almost 50,000 records across 14 features. It does have some missing data - most of which is tidily organised (being recorded as '?' for categorical variables).
+
+### Approach
+
+The approach will be to first *visualise and investigate* the data so that we can clearly see elements of interest. Following that, elements of interest will be modelled in some way, exposing *potential relationships* between the variables and the variable of interest (a classification of whether each record earns more than \$50,000 or not). Finally, some attempt will be made to produce a final *statistical model* (without using advance ML techniques) that best represent the data themselves.
+
+<hr>
+
+## Visualisation and Investigation
+
+In order to best get a basic 'look' at the data themselves, a visualisation was produced that plots some of the most interesting information in one place - split by explanatory and response variables. The dark blue bars represent those individuals earning over \$50,000 and the orange bars representing individuals earning \$50,000 or less:
+
+<br>
+
+```{r eda, fig.height = 30, fig.width = 20}
+
+plt_eda
+
+```
+
+<br>
+
+Breaking down some of the more interesting elements, there are some very clear changes in distribution across some of the explanatory variables. **Age**, for example, has a clear long-tailed, right-skew distribution of age for low earners (income \$50,000 or less), but a more normal distribution with a higher mean for high earners (income over \$50,000). **EducationNum**, which is an ordinal variable representing the highest attained level of education in a record, seems to have larger 'chunks' of high earners at higher values - suggesting higher educational attainment may be related to a higher level of income. **HoursWorkedGroup** is a variable created from *HoursWorked* where the hours have been binned into:
+
+* Minimal (<15 hours)
+* PartTime (<35 hours)
+* FullTime (<45 hours)
+* OverTime (<52 hours)
+* XOverTime (>=52 hours).
+
+In this scenario, we are seeing increases in the proportion of higher earners within the FullTime, OverTime and XOverTime groups. Within **MaritalStatus**, almost all of the high earning group are within the "Married-civ-spouse" group, creating a near 50:50 ratio of high:low earners within the group - not even nearly matched elsewhere. A similar scenario exists in **Race** where 'White' represents by far the largest ratio of high to low earners. **RelationshipStatus** and **Sex** potentially show a pair of highly-correlated outcomes, with 'Husband' and 'Male' representing exceptionally high ratios of high to low earners for their groups. It is also worth noting that 'Wife' has the highest ratio of high to low earners in the RelationshipStatus column - but a very low volume count by comparison to 'Husband'.
+
+<hr>
+
+## Potential Relationships
+
+### Age
+
+We begin by producing a jitter plot to visualise the relationship between *Age* and *High/Low Earners*. It's quite clear that the average age of high earners is higher than that of low earners:
+
+<br>
+
+``` {r rel_age_viz}
+
+plt_age
+
+```
+
+<br>
+
+Working from this visual, it is feasible to explore the relationship between the two variables, beginning with a simple logistic regression to identify any perceptible relationship. It is important to note that the presence of a wide array of other variables represents the possibility for many outcomes, and the relationship should **not** be misconstrued as causal at this time:
+
+<br>
+
+#### Logistic Model (Earnings Class ~ Age)
+
+``` {r rel_age_mod}
+
+logisticmodel_age %>% summary()
+
+```
+
+<br>
+
+#### Residual Error Plot (Earnings Class ~ Age)
+
+``` {r rel_age_mod_residuals, fig.width = 10}
+
+logisticmodel_age_residuals
+
+```
+
+<br>
+
+#### Residual Error Distribution (Earnings Class ~ Age)
+
+``` {r rel_age_mod_residuals2}
+
+logisticmodel_age_residuals2
+
+```
+
+<hr>
+
+## Statistical Model
+
+The
+
+<hr>
+
+## Conclusion
+
+The
+
+<hr>

@@ -1,0 +1,32 @@
+body {
+        line-height: 200%;
+}
+
+h2 {
+        text-align: center;
+}
+
+img {
+        margin: 1% auto 1% auto;
+        border: 1px solid #888;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+pre {
+        margin: 1% auto 1% auto;
+        border: 1px solid #888;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 128, 0.2), 0 6px 20px 0 rgba(0, 0, 128, 0.19);
+        transition-duration: 0.5s;
+        color: #222;
+}
+
+pre:hover {
+        background-color: rgba(0, 0, 128, 0.075);
+        color: #000;
+}
+
+#header {
+        text-align: center;
+}
