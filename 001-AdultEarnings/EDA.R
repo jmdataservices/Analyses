@@ -1,3 +1,6 @@
+require(mossR)
+require(AICcmodavg)
+
 dir <- gsub("/Analyses.*$", "/Analyses", getwd())
 
 source(paste0(dir, "/dependencies.R"))
@@ -60,7 +63,8 @@ dat_adults <- dat_adults %>%
                         "OverTime",
                         "XOverTime"
                 )),
-                EarningsClassBinary = ifelse(EarningsClass == "<=50K", 0, 1)
+                EarningsClassBinary = ifelse(EarningsClass == "<=50K", 0, 1),
+                HoursWorkedGroupNumeric = as.numeric(HoursWorkedGroup)
         )
 
 dat_adults %>%
@@ -172,6 +176,32 @@ plt_age <- dat_adults %>%
                 )
         )
 
+plt_age_density <- dat_adults %>%
+        ggplot(aes(x = Age)) +
+        geom_density(aes(group = EarningsClass, fill = EarningsClass), alpha = 0.4) +
+        geom_vline(data = dat_adults_meanage, aes(xintercept = MeanAge, color = EarningsClass), linetype = "dashed", size = 1) +
+        theme_moss() +
+        theme(
+                panel.grid.major.x = element_line(size = 0.75, linetype = "dashed", color = "grey90"),
+                axis.title.y = element_blank(),
+                axis.text.y = element_blank()
+        ) +
+        labs(
+                x = "Age"
+        ) +
+        scale_fill_manual(
+                values = c(
+                        ">50K" = "#628395",
+                        "<=50K" = "#CF995F"
+                )
+        ) +
+        scale_color_manual(
+                values = c(
+                        ">50K" = "#628395",
+                        "<=50K" = "#CF995F"
+                )
+        )
+
 logisticmodel_age <- glm(
         data = dat_adults,
         family = "binomial",
@@ -245,32 +275,6 @@ plt_edunum <- dat_adults %>%
                 )
         )
 
-plt_age_density <- dat_adults %>%
-        ggplot(aes(x = Age)) +
-        geom_density(aes(group = EarningsClass, fill = EarningsClass), alpha = 0.4) +
-        geom_vline(data = dat_adults_meanage, aes(xintercept = MeanAge, color = EarningsClass), linetype = "dashed", size = 1) +
-        theme_moss() +
-        theme(
-                panel.grid.major.x = element_line(size = 0.75, linetype = "dashed", color = "grey90"),
-                axis.title.y = element_blank(),
-                axis.text.y = element_blank()
-        ) +
-        labs(
-                x = "Age"
-        ) +
-        scale_fill_manual(
-                values = c(
-                        ">50K" = "#628395",
-                        "<=50K" = "#CF995F"
-                )
-        ) +
-        scale_color_manual(
-                values = c(
-                        ">50K" = "#628395",
-                        "<=50K" = "#CF995F"
-                )
-        )
-
 plt_edunum_density <- dat_adults %>%
         ggplot(aes(x = EducationNum)) +
         geom_histogram(aes(group = EarningsClass, fill = EarningsClass), alpha = 0.4, bins = 16) +
@@ -307,6 +311,91 @@ dat_adults_edunum_ords <- dat_adults %>%
         arrange(
                 EducationNum
         )
+
+logisticmodel_edunum <- glm(
+        data = dat_adults,
+        family = "binomial",
+        formula = EarningsClassBinary ~ EducationNum
+)
+
+logisticmodel_edunum %>% summary()
+
+dat_adults_meanhours <- dat_adults %>%
+        group_by(
+                EarningsClass
+        ) %>%
+        summarise(
+                MeanHoursWorked = mean(HoursWorked, na.rm = T)
+        )
+
+plt_hoursworked <- dat_adults %>%
+        ggplot(aes(x = EarningsClass)) +
+        geom_jitter(aes(y = HoursWorked, color = EarningsClass), width = 0.2, alpha = 0.04) +
+        geom_segment(data = dat_adults_meanhours, aes(x = EarningsClass, xend = EarningsClass, y = 0, yend = MeanHoursWorked), color = "black", size = 1) +
+        geom_hline(aes(yintercept = 0), color = "black", size = 1) +
+        geom_point(data = dat_adults_meanhours, aes(x = EarningsClass, y = MeanHoursWorked), color = "black", size = 10) +
+        geom_point(data = dat_adults_meanhours, aes(x = EarningsClass, y = MeanHoursWorked), color = "white", size = 8) +
+        geom_text(data = dat_adults_meanhours, aes(x = EarningsClass, y = MeanHoursWorked + 1, label = round(MeanHoursWorked, 1)), size = 5) +
+        theme_moss() +
+        theme(
+                panel.grid.major.y = element_line(size = 0.75, linetype = "dashed", color = "grey90")
+        ) +
+        labs(
+                x = "Earning Class",
+                y = "Hours Worked"
+        ) +
+        scale_y_continuous(
+                breaks = c(seq(0, 100, 10))
+        ) +
+        scale_color_manual(
+                values = c(
+                        ">50K" = "#628395",
+                        "<=50K" = "#CF995F"
+                )
+        )
+
+plt_hoursworked_density <- dat_adults %>%
+        ggplot(aes(x = HoursWorked)) +
+        geom_histogram(aes(group = EarningsClass, fill = EarningsClass), alpha = 0.4, binwidth = 5) +
+        geom_vline(data = dat_adults_meanhours, aes(xintercept = MeanHoursWorked, color = EarningsClass), linetype = "dashed", size = 1) +
+        theme_moss() +
+        theme(
+                panel.grid.major.x = element_line(size = 0.75, linetype = "dashed", color = "grey90"),
+                axis.title.y = element_blank(),
+                axis.text.y = element_blank()
+        ) +
+        labs(
+                x = "Hours Worked"
+        ) +
+        scale_fill_manual(
+                values = c(
+                        ">50K" = "#628395",
+                        "<=50K" = "#CF995F"
+                )
+        ) +
+        scale_color_manual(
+                values = c(
+                        ">50K" = "#628395",
+                        "<=50K" = "#CF995F"
+                )
+        ) +
+        facet_wrap(.~EarningsClass, ncol = 1)
+
+logisticmodel_hoursworked <- glm(
+        data = dat_adults,
+        family = "binomial",
+        formula = EarningsClassBinary ~ HoursWorked
+)
+
+logisticmodel_hoursworked %>% summary()
+
+anovamodel_relationships <- aov(
+        data = dat_adults,
+        formula = EarningsClassBinary ~ MaritalStatus + RelationshipStatus
+)
+
+anovamodel_relationships %>% summary()
+
 
 
 

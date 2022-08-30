@@ -84,7 +84,7 @@ plt_age
 
 ``` {r rel_age_viz_density}
 
-plt_age
+plt_age_density
 
 ```
 
@@ -127,6 +127,80 @@ plt_edunum
 ``` {r rel_edunum_viz_density}
 
 plt_edunum_density
+
+```
+
+<br>
+
+#### Logistic Model (Earnings Class ~ Educational Level)
+
+``` {r rel_edunum_mod}
+
+logisticmodel_edunum %>% summary()
+
+```
+
+<br>
+
+### Hours Worked
+
+<br>
+
+``` {r rel_hours_viz}
+
+plt_hoursworked
+
+```
+
+``` {r rel_hours_viz_density}
+
+plt_hoursworked_density
+
+```
+
+<br>
+
+Working
+
+<br>
+
+#### Logistic Model (Earnings Class ~ Hours Worked)
+
+``` {r rel_hoursworked_mod}
+
+logisticmodel_hoursworked %>% summary()
+
+```
+
+<br>
+
+### Marital Status
+
+<br>
+
+``` {r rel_marital_viz}
+
+
+
+```
+
+``` {r rel_marital_viz_density}
+
+
+
+```
+
+<br>
+
+Working
+
+<br>
+
+#### Logistic Model (Earnings Class ~ Marital Status)
+
+``` {r rel_hoursworked_mod}
+
+ %>% summary()
 
 ```
 
