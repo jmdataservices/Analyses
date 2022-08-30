@@ -148,7 +148,7 @@ dat_adults_meanage <- dat_adults %>%
 
 plt_age <- dat_adults %>%
         ggplot(aes(x = EarningsClass)) +
-        geom_jitter(aes(y = Age, color = EarningsClass), width = 0.2, alpha = 0.1) +
+        geom_jitter(aes(y = Age, color = EarningsClass), width = 0.2, alpha = 0.04) +
         geom_segment(data = dat_adults_meanage, aes(x = EarningsClass, xend = EarningsClass, y = 0, yend = MeanAge), color = "black", size = 1) +
         geom_hline(aes(yintercept = 0), color = "black", size = 1) +
         geom_point(data = dat_adults_meanage, aes(x = EarningsClass, y = MeanAge), color = "black", size = 10) +
@@ -209,6 +209,103 @@ logisticmodel_age_residuals2 <- data.frame(
         labs(
                 x = "Residuals",
                 y = ""
+        )
+
+dat_adults_meanedunum <- dat_adults %>%
+        group_by(
+                EarningsClass
+        ) %>%
+        summarise(
+                MeanEducationNum = mean(EducationNum, na.rm = T)
+        )
+
+plt_edunum <- dat_adults %>%
+        ggplot(aes(x = EarningsClass)) +
+        geom_jitter(aes(y = EducationNum, color = EarningsClass), width = 0.2, alpha = 0.04) +
+        geom_segment(data = dat_adults_meanedunum, aes(x = EarningsClass, xend = EarningsClass, y = 0, yend = MeanEducationNum), color = "black", size = 1) +
+        geom_hline(aes(yintercept = 0), color = "black", size = 1) +
+        geom_point(data = dat_adults_meanedunum, aes(x = EarningsClass, y = MeanEducationNum), color = "black", size = 10) +
+        geom_point(data = dat_adults_meanedunum, aes(x = EarningsClass, y = MeanEducationNum), color = "white", size = 8) +
+        geom_text(data = dat_adults_meanedunum, aes(x = EarningsClass, y = MeanEducationNum + 1, label = round(MeanEducationNum, 1)), size = 5) +
+        theme_moss() +
+        theme(
+                panel.grid.major.y = element_line(size = 0.75, linetype = "dashed", color = "grey90")
+        ) +
+        labs(
+                x = "Earning Class",
+                y = "Education Level"
+        ) +
+        scale_y_continuous(
+                breaks = c(seq(0, 20, 4))
+        ) +
+        scale_color_manual(
+                values = c(
+                        ">50K" = "#628395",
+                        "<=50K" = "#CF995F"
+                )
+        )
+
+plt_age_density <- dat_adults %>%
+        ggplot(aes(x = Age)) +
+        geom_density(aes(group = EarningsClass, fill = EarningsClass), alpha = 0.4) +
+        geom_vline(data = dat_adults_meanage, aes(xintercept = MeanAge, color = EarningsClass), linetype = "dashed", size = 1) +
+        theme_moss() +
+        theme(
+                panel.grid.major.x = element_line(size = 0.75, linetype = "dashed", color = "grey90"),
+                axis.title.y = element_blank(),
+                axis.text.y = element_blank()
+        ) +
+        labs(
+                x = "Age"
+        ) +
+        scale_fill_manual(
+                values = c(
+                        ">50K" = "#628395",
+                        "<=50K" = "#CF995F"
+                )
+        ) +
+        scale_color_manual(
+                values = c(
+                        ">50K" = "#628395",
+                        "<=50K" = "#CF995F"
+                )
+        )
+
+plt_edunum_density <- dat_adults %>%
+        ggplot(aes(x = EducationNum)) +
+        geom_histogram(aes(group = EarningsClass, fill = EarningsClass), alpha = 0.4, bins = 16) +
+        geom_vline(data = dat_adults_meanedunum, aes(xintercept = MeanEducationNum, color = EarningsClass), linetype = "dashed", size = 1) +
+        theme_moss() +
+        theme(
+                panel.grid.major.x = element_line(size = 0.75, linetype = "dashed", color = "grey90"),
+                axis.title.y = element_blank(),
+                axis.text.y = element_blank()
+        ) +
+        labs(
+                x = "Education Level"
+        ) +
+        scale_fill_manual(
+                values = c(
+                        ">50K" = "#628395",
+                        "<=50K" = "#CF995F"
+                )
+        ) +
+        scale_color_manual(
+                values = c(
+                        ">50K" = "#628395",
+                        "<=50K" = "#CF995F"
+                )
+        ) +
+        facet_wrap(.~EarningsClass, ncol = 1)
+
+dat_adults_edunum_ords <- dat_adults %>%
+        select(
+                Education,
+                EducationNum
+        ) %>%
+        distinct() %>%
+        arrange(
+                EducationNum
         )
 
 

@@ -82,6 +82,12 @@ plt_age
 
 ```
 
+``` {r rel_age_viz_density}
+
+plt_age
+
+```
+
 <br>
 
 Working from this visual, it is feasible to explore the relationship between the two variables, beginning with a simple logistic regression to identify any perceptible relationship. It is important to note that the presence of a wide array of other variables represents the possibility for many outcomes, and the relationship should **not** be misconstrued as causal at this time:
@@ -98,23 +104,33 @@ logisticmodel_age %>% summary()
 
 <br>
 
-#### Residual Error Plot (Earnings Class ~ Age)
+### Educational Level
 
-``` {r rel_age_mod_residuals, fig.width = 10}
+The educational level is codified into an ordinal format, allowing us to map educational levels to earnings class using primarily numbers:
 
-logisticmodel_age_residuals
+``` {r rel_edunum_ords}
+
+dat_adults_edunum_ords
 
 ```
 
 <br>
 
-#### Residual Error Distribution (Earnings Class ~ Age)
+Fundamentally, we can then map the educational level to the earnings class to create a similar approach to the analysis for age - showing us the outcomes more clearly:
 
-``` {r rel_age_mod_residuals2}
+``` {r rel_edunum_viz}
 
-logisticmodel_age_residuals2
+plt_edunum
 
 ```
+
+``` {r rel_edunum_viz_density}
+
+plt_edunum_density
+
+```
+
+<br>
 
 <hr>
 
