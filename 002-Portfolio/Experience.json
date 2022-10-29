@@ -1,0 +1,146 @@
+[
+    {
+        "Work Experience": [
+            {
+                "Employer": "Centrica",
+                "Job Title": "Customer Journey Analyst",
+                "Experience": [
+                    {
+                        "Work Title": "Communication Performance Analytics",
+                        "Work Description": "",
+                        "Tools Used": [
+                            ""
+                        ],
+                        "Start Date": "",
+                        "End Date": "",
+                        "Commercial Value": "",
+                        "Status": "",
+                        "Notable Information": [
+                            ""
+                        ]
+                    },
+                    {
+                        "Work Title": "Journey Funnel Analytics",
+                        "Work Description": "",
+                        "Tools Used": [
+                            ""
+                        ],
+                        "Start Date": "",
+                        "End Date": "",
+                        "Commercial Value": "",
+                        "Status": "",
+                        "Notable Information": [
+                            ""
+                        ]
+                    },
+                    {
+                        "Work Title": "Complaints Analytics",
+                        "Work Description": "",
+                        "Tools Used": [
+                            ""
+                        ],
+                        "Start Date": "",
+                        "End Date": "",
+                        "Commercial Value": "",
+                        "Status": "",
+                        "Notable Information": [
+                            ""
+                        ]
+                    },
+                    {
+                        "Work Title": "Collective Switching Analysis",
+                        "Work Description": "",
+                        "Tools Used": [
+                            ""
+                        ],
+                        "Start Date": "",
+                        "End Date": "",
+                        "Commercial Value": "",
+                        "Status": "",
+                        "Notable Information": [
+                            ""
+                        ]
+                    }
+                ]
+            },
+            {
+                "Employer": "",
+                "Job Title": "",
+                "Experience": [
+                    {
+                        "Work Title": "",
+                        "Work Description": "",
+                        "Tools Used": [
+                            ""
+                        ],
+                        "Start Date": "",
+                        "End Date": "",
+                        "Commercial Value": "",
+                        "Status": "",
+                        "Notable Information": [
+                            ""
+                        ]
+                    },
+                    {
+                        "Work Title": "",
+                        "Work Description": "",
+                        "Tools Used": [
+                            ""
+                        ],
+                        "Start Date": "",
+                        "End Date": "",
+                        "Commercial Value": "",
+                        "Status": "",
+                        "Notable Information": [
+                            ""
+                        ]
+                    }
+                ]
+            },
+            {
+                "Employer": "Example Employer",
+                "Job Title": "Example Analyst",
+                "Experience": [
+                    {
+                        "Work Title": "Example Work",
+                        "Work Description": "In this example I did...",
+                        "Tools Used": [
+                            "R",
+                            "Python",
+                            "SQL",
+                            "Azure DevOps"
+                        ],
+                        "Start Date": "2000-01-01 00:00:00.000",
+                        "End Date": "2001-01-01 00:00:00.000",
+                        "Commercial Value": "£10m",
+                        "Status": "Complete",
+                        "Notable Information": [
+                            "This is a place to add multiple notes",
+                            "It's also useful if you want to highlight key elements"
+                        ]
+                    },
+                    {
+                        "Work Title": "Example Work 2",
+                        "Work Description": "This example allowed me to do the extra...",
+                        "Tools Used": [
+                            "R",
+                            "Python",
+                            "SQL",
+                            "PyTorch",
+                            "Google Analytics"
+                        ],
+                        "Start Date": "2000-01-01 00:00:00.000",
+                        "End Date": "2001-01-01 00:00:00.000",
+                        "Commercial Value": "£400k",
+                        "Status": "Awaiting Deployment",
+                        "Notable Information": [
+                            "No notes"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "Created Date": "2022-10-29 15:53:00.000",
+        "Updated Date": "2022-10-29 15:53:00.000"
+    }    
+]
