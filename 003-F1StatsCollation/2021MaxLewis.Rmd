@@ -2,7 +2,9 @@
 title: "2021 - Max vs Lewis"
 author: "Jamie McLaughlin"
 date: "2023-03-12"
-output: html_document
+output:
+        html_document:
+                css: "styles.css"
 ---
 
 ![F1 Flyover, Photo by Abed Ismail on Unsplash](src/f1flyover.jpg)
@@ -26,6 +28,7 @@ knitr::opts_chunk$set(
 rm(list = ls())
 library(mossR)
 library(gridExtra)
+library(cowplot)
 
 lap_times <- read.csv("data/lap_times.csv")
 pit_stops <- read.csv("data/pit_stops.csv")
@@ -201,9 +204,9 @@ laptimes_lm2021_diffs %>%
 
 ## Round 1
 
-```{r round1}
+```{r round1, fig.height = 20}
 
-plt_multi01 <- list(
+plt_multi <- list(
         laptimes_lm2021 %>% 
                 filter(
                         Round == 1
@@ -214,8 +217,14 @@ plt_multi01 <- list(
                 theme_msc() +
                 theme(
                         panel.grid.major.y = element_line(linewidth = 0.5, linetype = "dashed", color = "grey80"),
+                        legend.position = "top",
+                        panel.background = element_rect(fill = "#000000", color = "#000000"),
+                        plot.background = element_rect(fill = "#000000", color = "#000000"),
+                        plot.title = element_text(color = "#ffffff"),
+                        plot.subtitle = element_text(color = "#ffffff"),
+                        axis.text = element_text(color = "#ffffff"),
                         axis.text.x = element_blank(),
-                        legend.position = "top"
+                        strip.text = element_text(color = "#ffffff")
                 ) +
                 labs(
                         title = "Lap Times During Round 1",
@@ -225,17 +234,18 @@ plt_multi01 <- list(
                         color = ""
                 ) +
                 scale_y_continuous(
-                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))}
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
                 ) +
                 scale_color_manual(
                         values = c(
                                 "Lewis Hamilton" = "seagreen",
                                 "Max Verstappen" = "navy"
                         )
-                ) +
-                coord_cartesian(
-                        ylim = c(92500, 100000)
-                ),
+                ),# +
+                #coord_cartesian(
+                #        ylim = c(92500, 100000)
+                #),
         laptimes_lm2021_diffs %>% 
                 filter(
                         Round == 1
@@ -248,17 +258,22 @@ plt_multi01 <- list(
                 geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
                 #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
                 #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
-                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0) +
-                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0) +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
                 geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
                 theme_msc() +
                 theme(
-                        axis.text = element_text(size = 11),
-                        strip.text = element_text(size = 10),
+                        panel.background = element_rect(fill = "#000000", color = "#000000"),
+                        plot.background = element_rect(fill = "#000000", color = "#000000"),
+                        plot.title = element_text(color = "#ffffff"),
+                        plot.subtitle = element_text(color = "#ffffff"),
+                        axis.text = element_text(color = "#ffffff", size = 11),
+                        axis.text.x = element_blank(),
+                        strip.text = element_text(color = "#ffffff", size = 10),
                         strip.background = element_rect(color = "grey50")
                 ) +
                 labs(
-                        x = "Lap Time",
+                        x = "Lap Number",
                         y = "Lead"
                 ) +
                 scale_y_continuous(
@@ -272,18 +287,21 @@ plt_multi01 <- list(
                 )
 )
 
-grid.arrange(
-        plt_multi01[[1]],
-        plt_multi01[[2]]
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
 )
 
 ```
 
 ## Round 2
 
-```{r round2}
+```{r round2, fig.height = 20}
 
-plt_multi02 <- list(
+plt_multi <- list(
         laptimes_lm2021 %>% 
                 filter(
                         Round == 2
@@ -305,7 +323,8 @@ plt_multi02 <- list(
                         color = ""
                 ) +
                 scale_y_continuous(
-                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))}
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
                 ) +
                 scale_color_manual(
                         values = c(
@@ -314,7 +333,7 @@ plt_multi02 <- list(
                         )
                 ) +
                 coord_cartesian(
-                        ylim = c(75000, 115000)
+                        ylim = c(75000, 150000)
                 ),
         laptimes_lm2021_diffs %>% 
                 filter(
@@ -328,8 +347,8 @@ plt_multi02 <- list(
                 geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
                 #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
                 #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
-                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0) +
-                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0) +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
                 geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
                 theme_msc() +
                 theme(
@@ -338,7 +357,7 @@ plt_multi02 <- list(
                         strip.background = element_rect(color = "grey50")
                 ) +
                 labs(
-                        x = "Lap Time",
+                        x = "Lap Number",
                         y = "Lead"
                 ) +
                 scale_y_continuous(
@@ -355,9 +374,12 @@ plt_multi02 <- list(
                 )
 )
 
-grid.arrange(
-        plt_multi02[[1]],
-        plt_multi02[[2]]
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
 )
 
 ```
@@ -366,7 +388,7 @@ grid.arrange(
 
 ```{r round3}
 
-plt_multi03 <- list(
+plt_multi <- list(
         laptimes_lm2021 %>% 
                 filter(
                         Round == 3
@@ -388,16 +410,14 @@ plt_multi03 <- list(
                         color = ""
                 ) +
                 scale_y_continuous(
-                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))}
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
                 ) +
                 scale_color_manual(
                         values = c(
                                 "Lewis Hamilton" = "seagreen",
                                 "Max Verstappen" = "navy"
                         )
-                ) +
-                coord_cartesian(
-                        ylim = c(79000, 85000)
                 ),
         laptimes_lm2021_diffs %>% 
                 filter(
@@ -411,8 +431,8 @@ plt_multi03 <- list(
                 geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
                 #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
                 #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
-                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0) +
-                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0) +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
                 geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
                 theme_msc() +
                 theme(
@@ -421,7 +441,7 @@ plt_multi03 <- list(
                         strip.background = element_rect(color = "grey50")
                 ) +
                 labs(
-                        x = "Lap Time",
+                        x = "Lap Number",
                         y = "Lead"
                 ) +
                 scale_y_continuous(
@@ -435,9 +455,12 @@ plt_multi03 <- list(
                 )
 )
 
-grid.arrange(
-        plt_multi03[[1]],
-        plt_multi03[[2]]
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
 )
 
 ```
@@ -446,7 +469,7 @@ grid.arrange(
 
 ```{r round4}
 
-plt_multi04 <- list(
+plt_multi <- list(
         laptimes_lm2021 %>% 
                 filter(
                         Round == 4
@@ -468,16 +491,14 @@ plt_multi04 <- list(
                         color = ""
                 ) +
                 scale_y_continuous(
-                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))}
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
                 ) +
                 scale_color_manual(
                         values = c(
                                 "Lewis Hamilton" = "seagreen",
                                 "Max Verstappen" = "navy"
                         )
-                ) +
-                coord_cartesian(
-                        ylim = c(75000, 90000)
                 ),
         laptimes_lm2021_diffs %>% 
                 filter(
@@ -491,8 +512,8 @@ plt_multi04 <- list(
                 geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
                 #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
                 #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
-                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0) +
-                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0) +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
                 geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
                 theme_msc() +
                 theme(
@@ -501,7 +522,7 @@ plt_multi04 <- list(
                         strip.background = element_rect(color = "grey50")
                 ) +
                 labs(
-                        x = "Lap Time",
+                        x = "Lap Number",
                         y = "Lead"
                 ) +
                 scale_y_continuous(
@@ -515,9 +536,12 @@ plt_multi04 <- list(
                 )
 )
 
-grid.arrange(
-        plt_multi04[[1]],
-        plt_multi04[[2]]
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
 )
 
 ```
@@ -526,7 +550,7 @@ grid.arrange(
 
 ```{r round5}
 
-plt_multi05 <- list(
+plt_multi <- list(
         laptimes_lm2021 %>% 
                 filter(
                         Round == 5
@@ -548,16 +572,14 @@ plt_multi05 <- list(
                         color = ""
                 ) +
                 scale_y_continuous(
-                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))}
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
                 ) +
                 scale_color_manual(
                         values = c(
                                 "Lewis Hamilton" = "seagreen",
                                 "Max Verstappen" = "navy"
                         )
-                ) +
-                coord_cartesian(
-                        ylim = c(75000, 82000)
                 ),
         laptimes_lm2021_diffs %>% 
                 filter(
@@ -571,8 +593,8 @@ plt_multi05 <- list(
                 geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
                 #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
                 #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
-                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0) +
-                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0) +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
                 geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
                 theme_msc() +
                 theme(
@@ -581,7 +603,7 @@ plt_multi05 <- list(
                         strip.background = element_rect(color = "grey50")
                 ) +
                 labs(
-                        x = "Lap Time",
+                        x = "Lap Number",
                         y = "Lead"
                 ) +
                 scale_y_continuous(
@@ -595,9 +617,12 @@ plt_multi05 <- list(
                 )
 )
 
-grid.arrange(
-        plt_multi05[[1]],
-        plt_multi05[[2]]
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
 )
 
 ```
@@ -606,7 +631,7 @@ grid.arrange(
 
 ```{r round6}
 
-plt_multi06 <- list(
+plt_multi <- list(
         laptimes_lm2021 %>% 
                 filter(
                         Round == 6
@@ -628,7 +653,8 @@ plt_multi06 <- list(
                         color = ""
                 ) +
                 scale_y_continuous(
-                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))}
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
                 ) +
                 scale_color_manual(
                         values = c(
@@ -637,7 +663,7 @@ plt_multi06 <- list(
                         )
                 ) +
                 coord_cartesian(
-                        ylim = c(103000, 110000)
+                        ylim = c(75000, 150000)
                 ),
         laptimes_lm2021_diffs %>% 
                 filter(
@@ -651,8 +677,8 @@ plt_multi06 <- list(
                 geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
                 #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
                 #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
-                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0) +
-                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0) +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
                 geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
                 theme_msc() +
                 theme(
@@ -661,7 +687,7 @@ plt_multi06 <- list(
                         strip.background = element_rect(color = "grey50")
                 ) +
                 labs(
-                        x = "Lap Time",
+                        x = "Lap Number",
                         y = "Lead"
                 ) +
                 scale_y_continuous(
@@ -675,9 +701,12 @@ plt_multi06 <- list(
                 )
 )
 
-grid.arrange(
-        plt_multi06[[1]],
-        plt_multi06[[2]]
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
 )
 
 ```
@@ -686,7 +715,7 @@ grid.arrange(
 
 ```{r round7}
 
-plt_multi07 <- list(
+plt_multi <- list(
         laptimes_lm2021 %>% 
                 filter(
                         Round == 7
@@ -708,16 +737,14 @@ plt_multi07 <- list(
                         color = ""
                 ) +
                 scale_y_continuous(
-                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))}
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
                 ) +
                 scale_color_manual(
                         values = c(
                                 "Lewis Hamilton" = "seagreen",
                                 "Max Verstappen" = "navy"
                         )
-                ) +
-                coord_cartesian(
-                        ylim = c(95000, 102000)
                 ),
         laptimes_lm2021_diffs %>% 
                 filter(
@@ -731,8 +758,8 @@ plt_multi07 <- list(
                 geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
                 #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
                 #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
-                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0) +
-                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0) +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
                 geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
                 theme_msc() +
                 theme(
@@ -741,7 +768,7 @@ plt_multi07 <- list(
                         strip.background = element_rect(color = "grey50")
                 ) +
                 labs(
-                        x = "Lap Time",
+                        x = "Lap Number",
                         y = "Lead"
                 ) +
                 scale_y_continuous(
@@ -755,9 +782,12 @@ plt_multi07 <- list(
                 )
 )
 
-grid.arrange(
-        plt_multi07[[1]],
-        plt_multi07[[2]]
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
 )
 
 ```
@@ -766,7 +796,7 @@ grid.arrange(
 
 ```{r round8}
 
-plt_multi08 <- list(
+plt_multi <- list(
         laptimes_lm2021 %>% 
                 filter(
                         Round == 8
@@ -788,16 +818,14 @@ plt_multi08 <- list(
                         color = ""
                 ) +
                 scale_y_continuous(
-                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))}
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
                 ) +
                 scale_color_manual(
                         values = c(
                                 "Lewis Hamilton" = "seagreen",
                                 "Max Verstappen" = "navy"
                         )
-                ) +
-                coord_cartesian(
-                        ylim = c(65000, 72000)
                 ),
         laptimes_lm2021_diffs %>% 
                 filter(
@@ -811,8 +839,8 @@ plt_multi08 <- list(
                 geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
                 #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
                 #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
-                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0) +
-                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0) +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
                 geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
                 theme_msc() +
                 theme(
@@ -821,7 +849,7 @@ plt_multi08 <- list(
                         strip.background = element_rect(color = "grey50")
                 ) +
                 labs(
-                        x = "Lap Time",
+                        x = "Lap Number",
                         y = "Lead"
                 ) +
                 scale_y_continuous(
@@ -835,9 +863,12 @@ plt_multi08 <- list(
                 )
 )
 
-grid.arrange(
-        plt_multi08[[1]],
-        plt_multi08[[2]]
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
 )
 
 ```
@@ -846,7 +877,7 @@ grid.arrange(
 
 ```{r round9}
 
-plt_multi09 <- list(
+plt_multi <- list(
         laptimes_lm2021 %>% 
                 filter(
                         Round == 9
@@ -868,16 +899,14 @@ plt_multi09 <- list(
                         color = ""
                 ) +
                 scale_y_continuous(
-                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))}
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
                 ) +
                 scale_color_manual(
                         values = c(
                                 "Lewis Hamilton" = "seagreen",
                                 "Max Verstappen" = "navy"
                         )
-                ) +
-                coord_cartesian(
-                        ylim = c(65000, 72000)
                 ),
         laptimes_lm2021_diffs %>% 
                 filter(
@@ -891,8 +920,8 @@ plt_multi09 <- list(
                 geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
                 #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
                 #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
-                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0) +
-                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0) +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
                 geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
                 theme_msc() +
                 theme(
@@ -901,7 +930,7 @@ plt_multi09 <- list(
                         strip.background = element_rect(color = "grey50")
                 ) +
                 labs(
-                        x = "Lap Time",
+                        x = "Lap Number",
                         y = "Lead"
                 ) +
                 scale_y_continuous(
@@ -915,9 +944,12 @@ plt_multi09 <- list(
                 )
 )
 
-grid.arrange(
-        plt_multi09[[1]],
-        plt_multi09[[2]]
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
 )
 
 ```
@@ -930,7 +962,7 @@ TBC
 
 ```{r round11}
 
-plt_multi11 <- list(
+plt_multi <- list(
         laptimes_lm2021 %>% 
                 filter(
                         Round == 11
@@ -952,7 +984,8 @@ plt_multi11 <- list(
                         color = ""
                 ) +
                 scale_y_continuous(
-                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))}
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
                 ) +
                 scale_color_manual(
                         values = c(
@@ -961,7 +994,7 @@ plt_multi11 <- list(
                         )
                 ) +
                 coord_cartesian(
-                        ylim = c(78000, 90000)
+                        ylim = c(75000, 150000)
                 ),
         laptimes_lm2021_diffs %>% 
                 filter(
@@ -975,8 +1008,8 @@ plt_multi11 <- list(
                 geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
                 #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
                 #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
-                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0) +
-                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0) +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
                 geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
                 theme_msc() +
                 theme(
@@ -985,7 +1018,7 @@ plt_multi11 <- list(
                         strip.background = element_rect(color = "grey50")
                 ) +
                 labs(
-                        x = "Lap Time",
+                        x = "Lap Number",
                         y = "Lead"
                 ) +
                 scale_y_continuous(
@@ -999,9 +1032,12 @@ plt_multi11 <- list(
                 )
 )
 
-grid.arrange(
-        plt_multi11[[1]],
-        plt_multi11[[2]]
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
 )
 
 ```
@@ -1014,7 +1050,7 @@ TBC
 
 ```{r round13}
 
-plt_multi13 <- list(
+plt_multi <- list(
         laptimes_lm2021 %>% 
                 filter(
                         Round == 13
@@ -1036,16 +1072,14 @@ plt_multi13 <- list(
                         color = ""
                 ) +
                 scale_y_continuous(
-                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))}
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
                 ) +
                 scale_color_manual(
                         values = c(
                                 "Lewis Hamilton" = "seagreen",
                                 "Max Verstappen" = "navy"
                         )
-                ) +
-                coord_cartesian(
-                        ylim = c(70000, 77000)
                 ),
         laptimes_lm2021_diffs %>% 
                 filter(
@@ -1059,8 +1093,8 @@ plt_multi13 <- list(
                 geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
                 #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
                 #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
-                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0) +
-                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0) +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
                 geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
                 theme_msc() +
                 theme(
@@ -1069,7 +1103,7 @@ plt_multi13 <- list(
                         strip.background = element_rect(color = "grey50")
                 ) +
                 labs(
-                        x = "Lap Time",
+                        x = "Lap Number",
                         y = "Lead"
                 ) +
                 scale_y_continuous(
@@ -1083,11 +1117,746 @@ plt_multi13 <- list(
                 )
 )
 
-grid.arrange(
-        plt_multi13[[1]],
-        plt_multi13[[2]]
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
 )
 
 ```
 
 ## Round 14
+
+```{r round14}
+
+plt_multi <- list(
+        laptimes_lm2021 %>% 
+                filter(
+                        Round == 14
+                ) %>% 
+                ggplot() +
+                geom_line(aes(x = Lap, y = Laptime, group = DriverName, color = DriverName), size = 1) +
+                geom_point(aes(x = Lap, y = Laptime, color = DriverName), size = 3) +
+                theme_msc() +
+                theme(
+                        panel.grid.major.y = element_line(linewidth = 0.5, linetype = "dashed", color = "grey80"),
+                        axis.text.x = element_blank(),
+                        legend.position = "top"
+                ) +
+                labs(
+                        title = "Lap Times During Round 14",
+                        subtitle = "Italian Grand Prix",
+                        x = "",
+                        y = "Lap",
+                        color = ""
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis Hamilton" = "seagreen",
+                                "Max Verstappen" = "navy"
+                        )
+                ),
+        laptimes_lm2021_diffs %>% 
+                filter(
+                        Round == 14
+                ) %>% 
+                mutate(
+                        RoundRace = paste(sep = " ", str_pad(Round, 2, pad = "0"), RaceName)
+                ) %>% 
+                ggplot() +
+                geom_hline(aes(yintercept = 0), linetype = "dotted", color = "grey50") +
+                geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
+                #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
+                #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
+                #geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
+                theme_msc() +
+                theme(
+                        axis.text = element_text(size = 11),
+                        strip.text = element_text(size = 10),
+                        strip.background = element_rect(color = "grey50")
+                ) +
+                labs(
+                        x = "Lap Number",
+                        y = "Lead"
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(abs(x), " secs")}
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis" = "seagreen",
+                                "Max" = "navy"
+                        )
+                )
+)
+
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
+)
+
+```
+
+## Round 15
+
+```{r round15}
+
+plt_multi <- list(
+        laptimes_lm2021 %>% 
+                filter(
+                        Round == 15
+                ) %>% 
+                ggplot() +
+                geom_line(aes(x = Lap, y = Laptime, group = DriverName, color = DriverName), size = 1) +
+                geom_point(aes(x = Lap, y = Laptime, color = DriverName), size = 3) +
+                theme_msc() +
+                theme(
+                        panel.grid.major.y = element_line(linewidth = 0.5, linetype = "dashed", color = "grey80"),
+                        axis.text.x = element_blank(),
+                        legend.position = "top"
+                ) +
+                labs(
+                        title = "Lap Times During Round 15",
+                        subtitle = "Russian Grand Prix",
+                        x = "",
+                        y = "Lap",
+                        color = ""
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis Hamilton" = "seagreen",
+                                "Max Verstappen" = "navy"
+                        )
+                ),
+        laptimes_lm2021_diffs %>% 
+                filter(
+                        Round == 15
+                ) %>% 
+                mutate(
+                        RoundRace = paste(sep = " ", str_pad(Round, 2, pad = "0"), RaceName)
+                ) %>% 
+                ggplot() +
+                geom_hline(aes(yintercept = 0), linetype = "dotted", color = "grey50") +
+                geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
+                #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
+                #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
+                geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
+                theme_msc() +
+                theme(
+                        axis.text = element_text(size = 11),
+                        strip.text = element_text(size = 10),
+                        strip.background = element_rect(color = "grey50")
+                ) +
+                labs(
+                        x = "Lap Number",
+                        y = "Lead"
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(abs(x), " secs")}
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis" = "seagreen",
+                                "Max" = "navy"
+                        )
+                )
+)
+
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
+)
+
+```
+
+## Round 16
+
+```{r round16}
+
+plt_multi <- list(
+        laptimes_lm2021 %>% 
+                filter(
+                        Round == 16
+                ) %>% 
+                ggplot() +
+                geom_line(aes(x = Lap, y = Laptime, group = DriverName, color = DriverName), size = 1) +
+                geom_point(aes(x = Lap, y = Laptime, color = DriverName), size = 3) +
+                theme_msc() +
+                theme(
+                        panel.grid.major.y = element_line(linewidth = 0.5, linetype = "dashed", color = "grey80"),
+                        axis.text.x = element_blank(),
+                        legend.position = "top"
+                ) +
+                labs(
+                        title = "Lap Times During Round 16",
+                        subtitle = "Turkish Grand Prix",
+                        x = "",
+                        y = "Lap",
+                        color = ""
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis Hamilton" = "seagreen",
+                                "Max Verstappen" = "navy"
+                        )
+                ),
+        laptimes_lm2021_diffs %>% 
+                filter(
+                        Round == 16
+                ) %>% 
+                mutate(
+                        RoundRace = paste(sep = " ", str_pad(Round, 2, pad = "0"), RaceName)
+                ) %>% 
+                ggplot() +
+                geom_hline(aes(yintercept = 0), linetype = "dotted", color = "grey50") +
+                geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
+                #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
+                #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
+                geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
+                theme_msc() +
+                theme(
+                        axis.text = element_text(size = 11),
+                        strip.text = element_text(size = 10),
+                        strip.background = element_rect(color = "grey50")
+                ) +
+                labs(
+                        x = "Lap Number",
+                        y = "Lead"
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(abs(x), " secs")}
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis" = "seagreen",
+                                "Max" = "navy"
+                        )
+                )
+)
+
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
+)
+
+```
+
+## Round 17
+
+```{r round17}
+
+plt_multi <- list(
+        laptimes_lm2021 %>% 
+                filter(
+                        Round == 17
+                ) %>% 
+                ggplot() +
+                geom_line(aes(x = Lap, y = Laptime, group = DriverName, color = DriverName), size = 1) +
+                geom_point(aes(x = Lap, y = Laptime, color = DriverName), size = 3) +
+                theme_msc() +
+                theme(
+                        panel.grid.major.y = element_line(linewidth = 0.5, linetype = "dashed", color = "grey80"),
+                        axis.text.x = element_blank(),
+                        legend.position = "top"
+                ) +
+                labs(
+                        title = "Lap Times During Round 17",
+                        subtitle = "United States Grand Prix",
+                        x = "",
+                        y = "Lap",
+                        color = ""
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis Hamilton" = "seagreen",
+                                "Max Verstappen" = "navy"
+                        )
+                ),
+        laptimes_lm2021_diffs %>% 
+                filter(
+                        Round == 17
+                ) %>% 
+                mutate(
+                        RoundRace = paste(sep = " ", str_pad(Round, 2, pad = "0"), RaceName)
+                ) %>% 
+                ggplot() +
+                geom_hline(aes(yintercept = 0), linetype = "dotted", color = "grey50") +
+                geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
+                #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
+                #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
+                geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
+                theme_msc() +
+                theme(
+                        axis.text = element_text(size = 11),
+                        strip.text = element_text(size = 10),
+                        strip.background = element_rect(color = "grey50")
+                ) +
+                labs(
+                        x = "Lap Number",
+                        y = "Lead"
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(abs(x), " secs")}
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis" = "seagreen",
+                                "Max" = "navy"
+                        )
+                )
+)
+
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
+)
+
+```
+
+## Round 18
+
+```{r round18}
+
+plt_multi <- list(
+        laptimes_lm2021 %>% 
+                filter(
+                        Round == 18
+                ) %>% 
+                ggplot() +
+                geom_line(aes(x = Lap, y = Laptime, group = DriverName, color = DriverName), size = 1) +
+                geom_point(aes(x = Lap, y = Laptime, color = DriverName), size = 3) +
+                theme_msc() +
+                theme(
+                        panel.grid.major.y = element_line(linewidth = 0.5, linetype = "dashed", color = "grey80"),
+                        axis.text.x = element_blank(),
+                        legend.position = "top"
+                ) +
+                labs(
+                        title = "Lap Times During Round 18",
+                        subtitle = "Mexico City Grand Prix",
+                        x = "",
+                        y = "Lap",
+                        color = ""
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis Hamilton" = "seagreen",
+                                "Max Verstappen" = "navy"
+                        )
+                ),
+        laptimes_lm2021_diffs %>% 
+                filter(
+                        Round == 18
+                ) %>% 
+                mutate(
+                        RoundRace = paste(sep = " ", str_pad(Round, 2, pad = "0"), RaceName)
+                ) %>% 
+                ggplot() +
+                geom_hline(aes(yintercept = 0), linetype = "dotted", color = "grey50") +
+                geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
+                #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
+                #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
+                geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
+                theme_msc() +
+                theme(
+                        axis.text = element_text(size = 11),
+                        strip.text = element_text(size = 10),
+                        strip.background = element_rect(color = "grey50")
+                ) +
+                labs(
+                        x = "Lap Number",
+                        y = "Lead"
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(abs(x), " secs")}
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis" = "seagreen",
+                                "Max" = "navy"
+                        )
+                )
+)
+
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
+)
+
+```
+
+## Round 19
+
+```{r round19}
+
+plt_multi <- list(
+        laptimes_lm2021 %>% 
+                filter(
+                        Round == 19
+                ) %>% 
+                ggplot() +
+                geom_line(aes(x = Lap, y = Laptime, group = DriverName, color = DriverName), size = 1) +
+                geom_point(aes(x = Lap, y = Laptime, color = DriverName), size = 3) +
+                theme_msc() +
+                theme(
+                        panel.grid.major.y = element_line(linewidth = 0.5, linetype = "dashed", color = "grey80"),
+                        axis.text.x = element_blank(),
+                        legend.position = "top"
+                ) +
+                labs(
+                        title = "Lap Times During Round 19",
+                        subtitle = "Sao Paulo Grand Prix",
+                        x = "",
+                        y = "Lap",
+                        color = ""
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis Hamilton" = "seagreen",
+                                "Max Verstappen" = "navy"
+                        )
+                ),
+        laptimes_lm2021_diffs %>% 
+                filter(
+                        Round == 19
+                ) %>% 
+                mutate(
+                        RoundRace = paste(sep = " ", str_pad(Round, 2, pad = "0"), RaceName)
+                ) %>% 
+                ggplot() +
+                geom_hline(aes(yintercept = 0), linetype = "dotted", color = "grey50") +
+                geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
+                #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
+                #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
+                geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
+                theme_msc() +
+                theme(
+                        axis.text = element_text(size = 11),
+                        strip.text = element_text(size = 10),
+                        strip.background = element_rect(color = "grey50")
+                ) +
+                labs(
+                        x = "Lap Number",
+                        y = "Lead"
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(abs(x), " secs")}
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis" = "seagreen",
+                                "Max" = "navy"
+                        )
+                )
+)
+
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
+)
+
+```
+
+## Round 20
+
+```{r round20}
+
+plt_multi <- list(
+        laptimes_lm2021 %>% 
+                filter(
+                        Round == 20
+                ) %>% 
+                ggplot() +
+                geom_line(aes(x = Lap, y = Laptime, group = DriverName, color = DriverName), size = 1) +
+                geom_point(aes(x = Lap, y = Laptime, color = DriverName), size = 3) +
+                theme_msc() +
+                theme(
+                        panel.grid.major.y = element_line(linewidth = 0.5, linetype = "dashed", color = "grey80"),
+                        axis.text.x = element_blank(),
+                        legend.position = "top"
+                ) +
+                labs(
+                        title = "Lap Times During Round 20",
+                        subtitle = "Qatar Grand Prix",
+                        x = "",
+                        y = "Lap",
+                        color = ""
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis Hamilton" = "seagreen",
+                                "Max Verstappen" = "navy"
+                        )
+                ),
+        laptimes_lm2021_diffs %>% 
+                filter(
+                        Round == 20
+                ) %>% 
+                mutate(
+                        RoundRace = paste(sep = " ", str_pad(Round, 2, pad = "0"), RaceName)
+                ) %>% 
+                ggplot() +
+                geom_hline(aes(yintercept = 0), linetype = "dotted", color = "grey50") +
+                geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
+                #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
+                #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
+                geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
+                theme_msc() +
+                theme(
+                        axis.text = element_text(size = 11),
+                        strip.text = element_text(size = 10),
+                        strip.background = element_rect(color = "grey50")
+                ) +
+                labs(
+                        x = "Lap Number",
+                        y = "Lead"
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(abs(x), " secs")}
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis" = "seagreen",
+                                "Max" = "navy"
+                        )
+                )
+)
+
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
+)
+
+```
+
+## Round 21
+
+```{r round21}
+
+plt_multi <- list(
+        laptimes_lm2021 %>% 
+                filter(
+                        Round == 21
+                ) %>% 
+                ggplot() +
+                geom_line(aes(x = Lap, y = Laptime, group = DriverName, color = DriverName), size = 1) +
+                geom_point(aes(x = Lap, y = Laptime, color = DriverName), size = 3) +
+                theme_msc() +
+                theme(
+                        panel.grid.major.y = element_line(linewidth = 0.5, linetype = "dashed", color = "grey80"),
+                        axis.text.x = element_blank(),
+                        legend.position = "top"
+                ) +
+                labs(
+                        title = "Lap Times During Round 21",
+                        subtitle = "Saudi Arabian Grand Prix",
+                        x = "",
+                        y = "Lap",
+                        color = ""
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis Hamilton" = "seagreen",
+                                "Max Verstappen" = "navy"
+                        )
+                ) +
+                coord_cartesian(
+                        ylim = c(75000, 150000)
+                ),
+        laptimes_lm2021_diffs %>% 
+                filter(
+                        Round == 21
+                ) %>% 
+                mutate(
+                        RoundRace = paste(sep = " ", str_pad(Round, 2, pad = "0"), RaceName)
+                ) %>% 
+                ggplot() +
+                geom_hline(aes(yintercept = 0), linetype = "dotted", color = "grey50") +
+                geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
+                #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
+                #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
+                geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
+                theme_msc() +
+                theme(
+                        axis.text = element_text(size = 11),
+                        strip.text = element_text(size = 10),
+                        strip.background = element_rect(color = "grey50")
+                ) +
+                labs(
+                        x = "Lap Number",
+                        y = "Lead"
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(abs(x), " secs")}
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis" = "seagreen",
+                                "Max" = "navy"
+                        )
+                )
+)
+
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
+)
+
+```
+
+## Round 22
+
+```{r round22}
+
+plt_multi <- list(
+        laptimes_lm2021 %>% 
+                filter(
+                        Round == 22
+                ) %>% 
+                ggplot() +
+                geom_line(aes(x = Lap, y = Laptime, group = DriverName, color = DriverName), size = 1) +
+                geom_point(aes(x = Lap, y = Laptime, color = DriverName), size = 3) +
+                theme_msc() +
+                theme(
+                        panel.grid.major.y = element_line(linewidth = 0.5, linetype = "dashed", color = "grey80"),
+                        axis.text.x = element_blank(),
+                        legend.position = "top"
+                ) +
+                labs(
+                        title = "Lap Times During Round 22",
+                        subtitle = "Abu Dhabi Grand Prix",
+                        x = "",
+                        y = "Lap",
+                        color = ""
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(floor(x / 60000), ":", str_pad((x / 1000) %% 60, 2, pad = "0"))},
+                        breaks = c(seq(0, 175000, 5000))
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis Hamilton" = "seagreen",
+                                "Max Verstappen" = "navy"
+                        )
+                ),
+        laptimes_lm2021_diffs %>% 
+                filter(
+                        Round == 22
+                ) %>% 
+                mutate(
+                        RoundRace = paste(sep = " ", str_pad(Round, 2, pad = "0"), RaceName)
+                ) %>% 
+                ggplot() +
+                geom_hline(aes(yintercept = 0), linetype = "dotted", color = "grey50") +
+                geom_line(aes(x = Lap, y = TimeDiff), color = "black", linewidth = 0.8) +
+                #geom_point(aes(x = Lap, y = MaxDiff), color = "navy") +
+                #geom_point(aes(x = Lap, y = -MaxDiff), color = "seagreen") +
+                geom_text(aes(x = 1, y = -MaxDiff, label = "Lewis"), color = "seagreen", hjust = 0, size = 5) +
+                geom_text(aes(x = 1, y = MaxDiff, label = "Max"), color = "navy", hjust = 0, size = 5) +
+                geom_text(aes(x = Lap, y = ifelse(Lap == RaceLaps, TimeDiff + ifelse(TimeDiff < 0, -3, 3), NA), label = TimeDiff, color = ifelse(TimeDiff < 0, "Lewis", "Max")), size = 5) +
+                theme_msc() +
+                theme(
+                        axis.text = element_text(size = 11),
+                        strip.text = element_text(size = 10),
+                        strip.background = element_rect(color = "grey50")
+                ) +
+                labs(
+                        x = "Lap Number",
+                        y = "Lead"
+                ) +
+                scale_y_continuous(
+                        labels = function(x) {paste0(abs(x), " secs")}
+                ) +
+                scale_color_manual(
+                        values = c(
+                                "Lewis" = "seagreen",
+                                "Max" = "navy"
+                        )
+                )
+)
+
+plot_grid(
+        plt_multi[[1]],
+        plt_multi[[2]],
+        align = "v",
+        nrow = 2,
+        rel_heights = c(3/4, 1/4)
+)
+
+```
+
+

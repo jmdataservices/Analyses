@@ -5,6 +5,7 @@
 rm(list = ls())
 library(mossR)
 library(gridExtra)
+library(cowplot)
 
 lap_times <- read.csv("data/lap_times.csv")
 pit_stops <- read.csv("data/pit_stops.csv")
@@ -175,10 +176,10 @@ ggsave("images/TimeDiffInfographic.png", device = "png", height = 14, width = 24
 plt_multi01 <- list(
         laptimes_lm2021 %>% 
                 filter(
-                        Round == 1
+                        Round == 14
                 ) %>% 
                 ggplot() +
-                geom_line(aes(x = Lap, y = Laptime, group = DriverName, color = DriverName), size = 1) +
+                geom_line(aes(x = Lap, y = Laptime, group = DriverName, color = DriverName), linewidth = 1) +
                 geom_point(aes(x = Lap, y = Laptime, color = DriverName), size = 3) +
                 theme_msc() +
                 theme(
@@ -206,7 +207,7 @@ plt_multi01 <- list(
                 ),
         laptimes_lm2021_diffs %>% 
                 filter(
-                        Round == 1
+                        Round == 14
                 ) %>% 
                 mutate(
                         RoundRace = paste(sep = " ", str_pad(Round, 2, pad = "0"), RaceName)
@@ -252,9 +253,7 @@ laptimes_lm2021 %>%
 pit_stops
 
 
-mossR::jmds_push_analysis(
-        input_filename = "2021MaxLewis.Rmd",
-        output_filename = "F1TestAnalysis.html",
-        analysis_name = "F1TestAnalysis",
-        analysis_desc = "A test run to include the F1 analysis"
-)
+
+
+
+
