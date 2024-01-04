@@ -2,7 +2,41 @@ source('./libraryList.R')
 
 track <- read_json("data/circuits/tracks/bh-2002.geojson")
 
-for (i in c(1:94)){
+track_length <- track$features[[1]]$properties$length
+track_alt <- track$features[[1]]$properties$altitude
+track_points <- length(track$features[[1]]$geometry$coordinates)
+
+track_points_straights <- c(
+        1,
+        13,
+        22,
+        36,
+        42,
+        52,
+        76,
+        85,
+        91
+)
+
+track_points_corners <- c(
+        3,
+        8,
+        11,
+        14,
+        24,
+        27,
+        32,
+        37,
+        44,
+        49,
+        57,
+        68,
+        77,
+        86,
+        90
+)
+
+for (i in c(1:track_points)){
         
         if (i == 1) {
                 coords <- data.frame()
@@ -15,13 +49,13 @@ for (i in c(1:94)){
                 coords,
                 data.frame(
                         Point = i,
-                        NextPoint = (i %% 94) + 1,
+                        NextPoint = (i %% track_points) + 1,
                         Lat = lat,
                         Lon = lon
                 )
         )
         
-        if (i == 94) {
+        if (i == track_points) {
                 
                 coords <- coords %>% 
                         left_join(
@@ -35,6 +69,10 @@ for (i in c(1:94)){
                         ) %>% 
                         mutate(
                                 CoordDist = sqrt((NextLat - Lat) ^ 2 + (NextLon - Lon) ^ 2),
+                                CumCoordDist = cumsum(CoordDist),
+                                TotalCoordDist = max(CumCoordDist),
+                                PercCoordDist = round(100 * CoordDist / TotalCoordDist, 2),
+                                PercTrack = round(100 * CumCoordDist / TotalCoordDist, 2),
                                 Direction = ifelse(
                                         (NextLon - Lon) >= 0 & (NextLat - Lat) >= 0,
                                         atan((NextLon - Lon) / (NextLat - Lat)),
@@ -52,13 +90,50 @@ for (i in c(1:94)){
                                                 )
                                         )
                                 ),
-                                Direction = round((180 / pi) * Direction, 1)
+                                Direction = round((180 / pi) * Direction, 1),
+                                NextDirection = lag(Direction, n = 1),
+                                isNewStraight = ifelse(
+                                        Point %in% track_points_straights,
+                                        1,
+                                        0
+                                ),
+                                isNewCorner = ifelse(
+                                        Point %in% track_points_corners,
+                                        1,
+                                        0
+                                ),
+                                SegmentType = ifelse(isNewStraight == 1, "Straight", ifelse(isNewCorner == 1, "Corner", NA))
+                        ) %>% 
+                        fill(SegmentType) %>% 
+                        mutate(
+                                StraightID = cumsum(isNewStraight == 1),
+                                StraightID = ifelse(SegmentType == "Corner", 0, StraightID),
+                                StraightID = ifelse(StraightID == 9, 1, StraightID),
+                                CornerID = cumsum(isNewCorner == 1),
+                                CornerID = ifelse(SegmentType == "Straight", 0, CornerID),
+                                TrackDistance = track_length,
+                                SectionDistance = (PercCoordDist / 100) * TrackDistance
                         )
                 
+                rm(i, lat, lon)
         }
 }
 
+
+
+coords %>% head(10)
+
+
+
 coords %>% 
         ggplot() +
-        geom_segment(aes(x = Lon, xend = NextLon, y = Lat, yend = NextLat)) +
-        geom_text(aes(x = Lon, y = Lat, label = Direction), size = 2.5)
+        geom_segment(aes(x = Lon, xend = NextLon, y = Lat, yend = NextLat, color = SegmentType)) +
+        geom_text(aes(x = Lon, y = Lat, label = ifelse(isNewCorner == 1, CornerID, NA)), size = 3.5) +
+        #geom_text(aes(x = Lon, y = Lat, label = Point), size = 3.5) +
+        theme_minimal() +
+        theme(
+                panel.grid = element_blank()
+        ) +
+        labs(
+                
+        )
