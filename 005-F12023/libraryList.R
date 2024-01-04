@@ -2,7 +2,7 @@ rm(list = ls())
 library(tidyverse)
 library(jsonlite)
 
-track_view_raw <- function(file) {
+track_view_raw <- function(file, reverse_points = F) {
         
         track <- read_json(file)
         
@@ -12,10 +12,19 @@ track_view_raw <- function(file) {
         track_name <- track$features[[1]]$properties$Name
         track_location <- track$features[[1]]$properties$Location
         
-        for (i in c(1:track_points)){
+        if (reverse_points == F) {
+                start <- 1
+                stop <- track_points
+        } else if (reverse_points == T) {
+                start <- track_points
+                stop <- 1
+        }
+        
+        for (i in c(start:stop)){
                 
-                if (i == 1) {
+                if (i == start) {
                         coords <- data.frame()
+                        j <- 1
                 }
                 
                 lon <- track$features[[1]]$geometry$coordinates[[i]][[1]][1]
@@ -24,16 +33,18 @@ track_view_raw <- function(file) {
                 coords <- rbind(
                         coords,
                         data.frame(
-                                Point = i,
-                                NextPoint = (i %% track_points) + 1,
+                                Point = j,
+                                NextPoint = (j %% track_points) + 1,
                                 Lat = lat,
                                 Lon = lon
                         )
                 )
                 
-                if (i == track_points) {
+                j <- j + 1
+                
+                if (i == stop) {
                         
-                        rm(i, lat, lon)
+                        rm(i, j, lat, lon)
                 }
         }
         
@@ -66,7 +77,9 @@ track_view_raw <- function(file) {
                         raw_visual = visual,
                         raw_length = track_length,
                         raw_altitude = track_alt,
-                        raw_points = track_points
+                        raw_points = track_points,
+                        raw_name = track_name,
+                        raw_location = track_location
                 )
         )
         

@@ -1,0 +1,360 @@
+Track,Segment,Point
+Sakhir,Straight,1
+Sakhir,Straight,13
+Sakhir,Straight,22
+Sakhir,Straight,36
+Sakhir,Straight,42
+Sakhir,Straight,52
+Sakhir,Straight,76
+Sakhir,Straight,85
+Sakhir,Straight,91
+Sakhir,Corner,3
+Sakhir,Corner,8
+Sakhir,Corner,11
+Sakhir,Corner,14
+Sakhir,Corner,24
+Sakhir,Corner,27
+Sakhir,Corner,32
+Sakhir,Corner,37
+Sakhir,Corner,44
+Sakhir,Corner,49
+Sakhir,Corner,57
+Sakhir,Corner,68
+Sakhir,Corner,77
+Sakhir,Corner,86
+Sakhir,Corner,90
+Spielberg,Straight,1
+Spielberg,Straight,5
+Spielberg,Straight,20
+Spielberg,Straight,33
+Spielberg,Straight,40
+Spielberg,Straight,50
+Spielberg,Straight,64
+Spielberg,Straight,70
+Spielberg,Straight,78
+Spielberg,Corner,3
+Spielberg,Corner,16
+Spielberg,Corner,28
+Spielberg,Corner,36
+Spielberg,Corner,41
+Spielberg,Corner,51
+Spielberg,Corner,58
+Spielberg,Corner,66
+Spielberg,Corner,72
+Abu Dhabi,Straight,1
+Abu Dhabi,Straight,7
+Abu Dhabi,Straight,12
+Abu Dhabi,Straight,23
+Abu Dhabi,Straight,27
+Abu Dhabi,Straight,40
+Abu Dhabi,Straight,57
+Abu Dhabi,Straight,89
+Abu Dhabi,Straight,93
+Abu Dhabi,Straight,97
+Abu Dhabi,Straight,101
+Abu Dhabi,Straight,115
+Abu Dhabi,Straight,122
+Abu Dhabi,Straight,132
+Abu Dhabi,Corner,2
+Abu Dhabi,Corner,8
+Abu Dhabi,Corner,16
+Abu Dhabi,Corner,24
+Abu Dhabi,Corner,29
+Abu Dhabi,Corner,49
+Abu Dhabi,Corner,55
+Abu Dhabi,Corner,73
+Abu Dhabi,Corner,90
+Abu Dhabi,Corner,94
+Abu Dhabi,Corner,98
+Abu Dhabi,Corner,102
+Abu Dhabi,Corner,108
+Abu Dhabi,Corner,116
+Abu Dhabi,Corner,124
+Melbourne,Straight,1
+Melbourne,Straight,16
+Melbourne,Straight,31
+Melbourne,Straight,37
+Melbourne,Straight,42
+Melbourne,Straight,67
+Melbourne,Straight,78
+Melbourne,Straight,105
+Melbourne,Straight,111
+Melbourne,Straight,119
+Melbourne,Straight,128
+Melbourne,Straight,135
+Melbourne,Straight,145
+Melbourne,Corner,3
+Melbourne,Corner,8
+Melbourne,Corner,25
+Melbourne,Corner,32
+Melbourne,Corner,38
+Melbourne,Corner,47
+Melbourne,Corner,52
+Melbourne,Corner,57
+Melbourne,Corner,68
+Melbourne,Corner,74
+Melbourne,Corner,92
+Melbourne,Corner,100
+Melbourne,Corner,107
+Melbourne,Corner,114
+Melbourne,Corner,121
+Melbourne,Corner,130
+Melbourne,Corner,136
+Baku,Straight,1
+Baku,Straight,6
+Baku,Straight,11
+Baku,Straight,17
+Baku,Straight,20
+Baku,Straight,25
+Baku,Straight,29
+Baku,Straight,34
+Baku,Straight,48
+Baku,Straight,54
+Baku,Straight,59
+Baku,Straight,66
+Baku,Straight,69
+Baku,Straight,72
+Baku,Straight,76
+Baku,Corner,2
+Baku,Corner,9
+Baku,Corner,15
+Baku,Corner,18
+Baku,Corner,23
+Baku,Corner,26
+Baku,Corner,31
+Baku,Corner,35
+Baku,Corner,40
+Baku,Corner,45
+Baku,Corner,51
+Baku,Corner,57
+Baku,Corner,61
+Baku,Corner,67
+Baku,Corner,70
+Baku,Corner,73
+Spa Francorchamps,Straight,1
+Spa Francorchamps,Straight,6
+Spa Francorchamps,Straight,24
+Spa Francorchamps,Straight,41
+Spa Francorchamps,Straight,46
+Spa Francorchamps,Straight,57
+Spa Francorchamps,Straight,62
+Spa Francorchamps,Straight,81
+Spa Francorchamps,Straight,98
+Spa Francorchamps,Straight,104
+Spa Francorchamps,Straight,116
+Spa Francorchamps,Straight,127
+Spa Francorchamps,Straight,134
+Spa Francorchamps,Straight,151
+Spa Francorchamps,Corner,2
+Spa Francorchamps,Corner,13
+Spa Francorchamps,Corner,15
+Spa Francorchamps,Corner,21
+Spa Francorchamps,Corner,32
+Spa Francorchamps,Corner,36
+Spa Francorchamps,Corner,42
+Spa Francorchamps,Corner,47
+Spa Francorchamps,Corner,58
+Spa Francorchamps,Corner,66
+Spa Francorchamps,Corner,74
+Spa Francorchamps,Corner,83
+Spa Francorchamps,Corner,91
+Spa Francorchamps,Corner,99
+Spa Francorchamps,Corner,106
+Spa Francorchamps,Corner,122
+Spa Francorchamps,Corner,130
+Spa Francorchamps,Corner,142
+Spa Francorchamps,Corner,147
+Sao Paulo,Straight,1
+Sao Paulo,Straight,30
+Sao Paulo,Straight,45
+Sao Paulo,Straight,54
+Sao Paulo,Straight,74
+Sao Paulo,Straight,86
+Sao Paulo,Straight,101
+Sao Paulo,Straight,115
+Sao Paulo,Straight,129
+Sao Paulo,Straight,139
+Sao Paulo,Straight,144
+Sao Paulo,Straight,157
+Sao Paulo,Straight,167
+Sao Paulo,Corner,3
+Sao Paulo,Corner,12
+Sao Paulo,Corner,17
+Sao Paulo,Corner,37
+Sao Paulo,Corner,46
+Sao Paulo,Corner,60
+Sao Paulo,Corner,77
+Sao Paulo,Corner,87
+Sao Paulo,Corner,103
+Sao Paulo,Corner,117
+Sao Paulo,Corner,133
+Sao Paulo,Corner,141
+Sao Paulo,Corner,150
+Sao Paulo,Corner,162
+Montreal,Straight,1
+Montreal,Straight,5
+Montreal,Straight,8
+Montreal,Straight,14
+Montreal,Straight,30
+Montreal,Straight,38
+Montreal,Straight,43
+Montreal,Straight,53
+Montreal,Straight,70
+Montreal,Straight,76
+Montreal,Straight,85
+Montreal,Straight,88
+Montreal,Straight,100
+Montreal,Corner,3
+Montreal,Corner,6
+Montreal,Corner,9
+Montreal,Corner,23
+Montreal,Corner,27
+Montreal,Corner,33
+Montreal,Corner,39
+Montreal,Corner,45
+Montreal,Corner,61
+Montreal,Corner,71
+Montreal,Corner,77
+Montreal,Corner,81
+Montreal,Corner,86
+Montreal,Corner,93
+Montreal,Corner,96
+Barcelona,Straight,1
+Barcelona,Straight,13
+Barcelona,Straight,19
+Barcelona,Straight,42
+Barcelona,Straight,59
+Barcelona,Straight,70
+Barcelona,Straight,75
+Barcelona,Straight,86
+Barcelona,Straight,96
+Barcelona,Straight,127
+Barcelona,Straight,136
+Barcelona,Straight,149
+Barcelona,Corner,6
+Barcelona,Corner,14
+Barcelona,Corner,20
+Barcelona,Corner,33
+Barcelona,Corner,44
+Barcelona,Corner,60
+Barcelona,Corner,71
+Barcelona,Corner,76
+Barcelona,Corner,82
+Barcelona,Corner,88
+Barcelona,Corner,97
+Barcelona,Corner,113
+Barcelona,Corner,128
+Barcelona,Corner,140
+Silverstone,Straight,1
+Silverstone,Straight,8
+Silverstone,Straight,29
+Silverstone,Straight,34
+Silverstone,Straight,49
+Silverstone,Straight,71
+Silverstone,Straight,78
+Silverstone,Straight,84
+Silverstone,Straight,91
+Silverstone,Straight,106
+Silverstone,Straight,114
+Silverstone,Straight,126
+Silverstone,Straight,133
+Silverstone,Corner,2
+Silverstone,Corner,14
+Silverstone,Corner,17
+Silverstone,Corner,21
+Silverstone,Corner,25
+Silverstone,Corner,31
+Silverstone,Corner,37
+Silverstone,Corner,47
+Silverstone,Corner,54
+Silverstone,Corner,58
+Silverstone,Corner,66
+Silverstone,Corner,73
+Silverstone,Corner,79
+Silverstone,Corner,85
+Silverstone,Corner,92
+Silverstone,Corner,100
+Silverstone,Corner,107
+Silverstone,Corner,115
+Silverstone,Corner,127
+Budapest,Straight,1
+Budapest,Straight,11
+Budapest,Straight,16
+Budapest,Straight,31
+Budapest,Straight,37
+Budapest,Straight,46
+Budapest,Straight,63
+Budapest,Straight,73
+Budapest,Straight,80
+Budapest,Straight,89
+Budapest,Straight,94
+Budapest,Straight,102
+Budapest,Straight,110
+Budapest,Straight,140
+Budapest,Corner,3
+Budapest,Corner,12
+Budapest,Corner,18
+Budapest,Corner,32
+Budapest,Corner,42
+Budapest,Corner,47
+Budapest,Corner,64
+Budapest,Corner,74
+Budapest,Corner,81
+Budapest,Corner,90
+Budapest,Corner,95
+Budapest,Corner,105
+Budapest,Corner,113
+Budapest,Corner,126
+Monza,Straight,1
+Monza,Straight,13
+Monza,Straight,17
+Monza,Straight,34
+Monza,Straight,45
+Monza,Straight,57
+Monza,Straight,64
+Monza,Straight,92
+Monza,Straight,122
+Monza,Corner,3
+Monza,Corner,8
+Monza,Corner,14
+Monza,Corner,18
+Monza,Corner,36
+Monza,Corner,40
+Monza,Corner,47
+Monza,Corner,59
+Monza,Corner,75
+Monza,Corner,80
+Monza,Corner,87
+Monza,Corner,95
+Suzuka,Straight,1
+Suzuka,Straight,8
+Suzuka,Straight,17
+Suzuka,Straight,26
+Suzuka,Straight,41
+Suzuka,Straight,61
+Suzuka,Straight,64
+Suzuka,Straight,69
+Suzuka,Straight,77
+Suzuka,Straight,86
+Suzuka,Straight,107
+Suzuka,Straight,124
+Suzuka,Straight,145
+Suzuka,Straight,170
+Suzuka,Corner,3
+Suzuka,Corner,9
+Suzuka,Corner,18
+Suzuka,Corner,22
+Suzuka,Corner,27
+Suzuka,Corner,33
+Suzuka,Corner,42
+Suzuka,Corner,50
+Suzuka,Corner,62
+Suzuka,Corner,65
+Suzuka,Corner,72
+Suzuka,Corner,78
+Suzuka,Corner,89
+Suzuka,Corner,109
+Suzuka,Corner,139
+Suzuka,Corner,149
+Suzuka,Corner,156
+Suzuka,Corner,161
