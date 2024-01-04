@@ -57,72 +57,82 @@ for (i in c(1:track_points)){
         
         if (i == track_points) {
                 
-                coords <- coords %>% 
-                        left_join(
-                                by = c("NextPoint" = "Point"),
-                                coords %>% 
-                                        select(
-                                                Point,
-                                                NextLat = Lat,
-                                                NextLon = Lon
-                                        )
-                        ) %>% 
-                        mutate(
-                                CoordDist = sqrt((NextLat - Lat) ^ 2 + (NextLon - Lon) ^ 2),
-                                CumCoordDist = cumsum(CoordDist),
-                                TotalCoordDist = max(CumCoordDist),
-                                PercCoordDist = round(100 * CoordDist / TotalCoordDist, 2),
-                                PercTrack = round(100 * CumCoordDist / TotalCoordDist, 2),
-                                Direction = ifelse(
-                                        (NextLon - Lon) >= 0 & (NextLat - Lat) >= 0,
-                                        atan((NextLon - Lon) / (NextLat - Lat)),
-                                        ifelse(
-                                                (NextLon - Lon) >= 0 & (NextLat - Lat) <= 0,
-                                                pi + atan((NextLon - Lon) / (NextLat - Lat)),
-                                                ifelse(
-                                                        (NextLon - Lon) <= 0 & (NextLat - Lat) <= 0,
-                                                        pi + atan((NextLon - Lon) / (NextLat - Lat)),
-                                                        ifelse(
-                                                                (NextLon - Lon) <= 0 & (NextLat - Lat) >= 0,
-                                                                (2 * pi) + atan((NextLon - Lon) / (NextLat - Lat)),
-                                                                atan((NextLon - Lon) / (NextLat - Lat))
-                                                        )
-                                                )
-                                        )
-                                ),
-                                Direction = round((180 / pi) * Direction, 1),
-                                NextDirection = lag(Direction, n = 1),
-                                isNewStraight = ifelse(
-                                        Point %in% track_points_straights,
-                                        1,
-                                        0
-                                ),
-                                isNewCorner = ifelse(
-                                        Point %in% track_points_corners,
-                                        1,
-                                        0
-                                ),
-                                SegmentType = ifelse(isNewStraight == 1, "Straight", ifelse(isNewCorner == 1, "Corner", NA))
-                        ) %>% 
-                        fill(SegmentType) %>% 
-                        mutate(
-                                StraightID = cumsum(isNewStraight == 1),
-                                StraightID = ifelse(SegmentType == "Corner", 0, StraightID),
-                                StraightID = ifelse(StraightID == 9, 1, StraightID),
-                                CornerID = cumsum(isNewCorner == 1),
-                                CornerID = ifelse(SegmentType == "Straight", 0, CornerID),
-                                TrackDistance = track_length,
-                                SectionDistance = (PercCoordDist / 100) * TrackDistance
-                        )
-                
                 rm(i, lat, lon)
         }
 }
+
+coords <- coords %>% 
+        left_join(
+                by = c("NextPoint" = "Point"),
+                coords %>% 
+                        select(
+                                Point,
+                                NextLat = Lat,
+                                NextLon = Lon
+                        )
+        ) %>% 
+        mutate(
+                CoordDist = sqrt((NextLat - Lat) ^ 2 + (NextLon - Lon) ^ 2),
+                CumCoordDist = cumsum(CoordDist),
+                TotalCoordDist = max(CumCoordDist),
+                PercCoordDist = round(100 * CoordDist / TotalCoordDist, 2),
+                PercTrack = round(100 * CumCoordDist / TotalCoordDist, 2),
+                Direction = ifelse(
+                        (NextLon - Lon) >= 0 & (NextLat - Lat) >= 0,
+                        atan((NextLon - Lon) / (NextLat - Lat)),
+                        ifelse(
+                                (NextLon - Lon) >= 0 & (NextLat - Lat) <= 0,
+                                pi + atan((NextLon - Lon) / (NextLat - Lat)),
+                                ifelse(
+                                        (NextLon - Lon) <= 0 & (NextLat - Lat) <= 0,
+                                        pi + atan((NextLon - Lon) / (NextLat - Lat)),
+                                        ifelse(
+                                                (NextLon - Lon) <= 0 & (NextLat - Lat) >= 0,
+                                                (2 * pi) + atan((NextLon - Lon) / (NextLat - Lat)),
+                                                atan((NextLon - Lon) / (NextLat - Lat))
+                                        )
+                                )
+                        )
+                ),
+                Direction = round((180 / pi) * Direction, 1),
+                PreviousDirection = lag(Direction, n = 1),
+                isNewStraight = ifelse(
+                        Point %in% track_points_straights,
+                        1,
+                        0
+                ),
+                isNewCorner = ifelse(
+                        Point %in% track_points_corners,
+                        1,
+                        0
+                ),
+                SegmentType = ifelse(isNewStraight == 1, "Straight", ifelse(isNewCorner == 1, "Corner", NA))
+        ) %>% 
+        fill(SegmentType) %>% 
+        mutate(
+                StraightID = cumsum(isNewStraight == 1),
+                StraightID = ifelse(SegmentType == "Corner", 0, StraightID),
+                StraightID = ifelse(StraightID == 9, 1, StraightID),
+                CornerID = cumsum(isNewCorner == 1),
+                CornerID = ifelse(SegmentType == "Straight", 0, CornerID),
+                TrackDistance = track_length,
+                SectionDistance = (PercCoordDist / 100) * TrackDistance,
+                CornerID = ifelse(isNewStraight == 1, lag(CornerID, default = 0), CornerID),
+                DirectionChange = Direction - PreviousDirection
+        )
 
 
 
 coords %>% head(10)
 
+
+coords %>% 
+        filter(
+                CornerID > 0
+        ) %>% 
+        group_by(
+                
+        )
 
 
 coords %>% 
