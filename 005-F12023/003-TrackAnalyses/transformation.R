@@ -1,7 +1,7 @@
 source('./libraryList.R')
 list.files("./data/circuits/tracks/")
 
-track_code <- "jp-1962"
+track_code <- "us-2023"
 track_path <- paste0("data/circuits/tracks/", track_code, ".geojson")
 track_path
 
