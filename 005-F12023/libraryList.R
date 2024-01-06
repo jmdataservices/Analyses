@@ -135,8 +135,37 @@ track_view_detailed <- function(raw_coords, corners, straights, track_length) {
                         TrackDistance = track_length,
                         SectionDistance = (PercCoordDist / 100) * TrackDistance,
                         CornerID = ifelse(isNewStraight == 1, lag(CornerID, default = 0), CornerID),
-                        DirectionChange = Direction - PreviousDirection
-                )
+                        DirectionChange = Direction - PreviousDirection,
+                        DirectionChange = ifelse(
+                                abs(DirectionChange) >= 180,
+                                ifelse(
+                                        DirectionChange < 0,
+                                        DirectionChange + 360,
+                                        DirectionChange - 360
+                                ),
+                                DirectionChange
+                        ),
+                        SegmentCode = paste0(str_sub(SegmentType, 1, 1), ifelse(StraightID == 0, CornerID, StraightID)),
+                        PreviousSegmentCode = ifelse(lag(SegmentCode) != SegmentCode, lag(SegmentCode), NA)
+                ) %>% 
+                fill(PreviousSegmentCode) %>% 
+                group_by(
+                        CornerID
+                ) %>% 
+                mutate(
+                        CornerTotalLength = sum(SectionDistance[SegmentType=="Corner"]),
+                        CornerPointNumber = row_number(),
+                        CornerPoints = max(CornerPointNumber, na.rm = T),
+                        CornerPoints = ifelse(CornerID == 0, 0, CornerPoints),
+                        CornerPointsProgress = CornerPointNumber,
+                        CornerTurnProgress = cumsum(abs(DirectionChange)),
+                        CornerLengthProgress = cumsum(SectionDistance),
+                        VectorDelta = sum(DirectionChange),
+                        TurnDirection = ifelse(VectorDelta < 0, "Left", "Right"),
+                        TurnAngle = abs(VectorDelta),
+                        PercCornerTurnProgress = round(100 * CornerTurnProgress / TurnAngle, 1),
+                        PercCornerLengthProgress = ifelse(CornerTotalLength == 0 | SegmentType == "Straight", NA, round(100 * CornerLengthProgress / CornerTotalLength, 1))
+                ) %>% as.data.frame()
         
         visual <- coords %>% 
                 ggplot() +

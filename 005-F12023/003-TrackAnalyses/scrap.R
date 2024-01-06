@@ -1,6 +1,8 @@
 source('./libraryList.R')
 
-track_code <- "bh-2002"
+#bh-2002
+#at-1969
+track_code <- "at-1969"
 track_path <- paste0("data/circuits/tracks/", track_code, ".geojson")
 
 raw <- track_view_raw(track_path)
@@ -16,4 +18,9 @@ det <- track_view_detailed(
         raw$raw_length
 )
 
-det$detailed_visual
+det$detailed_coords %>% head(30)
+det$detailed_coords %>% tail(10)
+
+det$detailed_coords[det$detailed_coords$CornerID==8,] %>% head(10)
+
+
