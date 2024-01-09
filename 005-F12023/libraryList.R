@@ -160,9 +160,9 @@ track_view_detailed <- function(raw_coords, corners, straights, track_length) {
                         CornerPointsProgress = round(CornerPointNumber / CornerPoints, 1),
                         CornerTurnProgress = cumsum(abs(DirectionChange)),
                         CornerLengthProgress = cumsum(SectionDistance),
-                        VectorDelta = sum(DirectionChange),
-                        TurnDirection = ifelse(VectorDelta < 0, "Left", "Right"),
-                        TurnAngle = abs(VectorDelta),
+                        CornerVectorDelta = sum(DirectionChange),
+                        TurnDirection = ifelse(CornerVectorDelta < 0, "Left", "Right"),
+                        TurnAngle = abs(CornerVectorDelta),
                         PercCornerTurnProgress = round(100 * CornerTurnProgress / TurnAngle, 1),
                         PercCornerLengthProgress = ifelse(CornerTotalLength == 0 | SegmentType == "Straight", NA, round(100 * CornerLengthProgress / CornerTotalLength, 1))
                 ) %>% 
@@ -177,7 +177,7 @@ track_view_detailed <- function(raw_coords, corners, straights, track_length) {
                         StraightPointsProgress = round(StraightPointNumber / StraightPoints, 1),
                         StraightTurnProgress = cumsum(abs(DirectionChange)),
                         StraightLengthProgress = cumsum(SectionDistance),
-                        VectorDelta = sum(DirectionChange),
+                        StraightVectorDelta = sum(DirectionChange),
                         StraightStraightness = sum(abs(DirectionChange))
                 ) %>% as.data.frame()
         
@@ -221,7 +221,7 @@ profile_corners <- function(track_details) {
                 distinct() %>% 
                 left_join(
                         by = "PreviousSegmentCode",
-                        det$detailed_coords %>% 
+                        track_details$detailed_coords %>% 
                                 mutate(
                                         SegmentLength = ifelse(StraightTotalLength > 0, StraightTotalLength, CornerTotalLength)
                                 ) %>% 
@@ -242,3 +242,44 @@ profile_corners <- function(track_details) {
         return(corner_profiles)
         
 }
+
+profile_straights <- function(track_details) {
+        
+        straight_profiles <- track_details$detailed_coords %>% 
+                filter(
+                        StraightID > 0,
+                        SegmentType == "Straight"
+                ) %>% 
+                select(
+                        StraightID,
+                        SegmentCode,
+                        PreviousSegmentCode,
+                        StraightTotalLength,
+                        StraightVectorDelta,
+                        TrackDistance
+                ) %>% 
+                distinct() %>% 
+                left_join(
+                        by = "PreviousSegmentCode",
+                        track_details$detailed_coords %>% 
+                                mutate(
+                                        SegmentLength = ifelse(StraightTotalLength > 0, StraightTotalLength, CornerTotalLength)
+                                ) %>% 
+                                select(
+                                        PreviousSegmentCode = SegmentCode,
+                                        PreviousSegment = SegmentType,
+                                        PreviousSegmentLength = SegmentLength
+                                ) %>% 
+                                distinct()
+                ) %>% 
+                filter(
+                        !is.na(PreviousSegmentCode)
+                ) %>% 
+                arrange(
+                        StraightID
+                )
+        
+        return(straight_profiles)
+        
+}
+

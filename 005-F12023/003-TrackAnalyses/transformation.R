@@ -2,14 +2,30 @@ source('./libraryList.R')
 
 tracks <- list.files("data/circuits/tracks")
 
+##########################################################################################################
+# LOOPER
+##########################################################################################################
+
 track_details <- data.frame()
 corner_profiles <- data.frame()
+straight_profiles <- data.frame()
 
 for (track in tracks) {
         
         track_path <- paste0("data/circuits/tracks/", track)
         
-        raw <- track_view_raw(track_path)
+        if (track %in% c(
+                "az-2016.geojson",
+                "fr-1969.geojson",
+                "sg-2008.geojson"
+                
+        )) {
+                rev <- T
+        } else {
+                rev <- F
+        }
+        
+        raw <- track_view_raw(track_path, reverse_points = rev)
         
         points <- read.csv("data/circuits/points.csv") %>% filter(Track == raw$raw_location)
         corners <- points$Point[points$Segment=="Corner"]
@@ -40,6 +56,14 @@ for (track in tracks) {
                                 )
                 )
                 
+                straight_profiles <- rbind(
+                        straight_profiles,
+                        profile_straights(det) %>% 
+                                mutate(
+                                        Track = raw$raw_location
+                                )
+                )
+                
                 print(paste0("Completed ingest for ", raw$raw_location, "."))
                 
         } else {
@@ -50,7 +74,7 @@ for (track in tracks) {
         
 }
 
-rm(corners, straights, track, track_path, det, points, raw, tracks)
+rm(corners, straights, track, track_path, det, points, raw, tracks, rev)
 
 all_corners <- corner_profiles %>% 
         group_by(
@@ -66,3 +90,19 @@ all_corners <- corner_profiles %>%
         arrange(
                 desc(MeanCorner)
         )
+
+all_straights <- straight_profiles %>% 
+        group_by(
+                Track
+        ) %>% 
+        summarise(
+                Straights = n(),
+                TotalStraight = sum(StraightTotalLength, na.rm = T),
+                TotalTrack = min(TrackDistance, na.rm = T),
+                PercStraight = round(TotalStraight / TotalTrack, 2)
+        ) %>% 
+        arrange(
+                desc(PercStraight)
+        )
+
+all_straights
